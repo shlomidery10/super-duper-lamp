@@ -1,0 +1,32 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Top5GoogleSearch.FileReader;
+using Top5GoogleSearch.Http;
+
+namespace Top5GoogleSearch
+{
+    public class Program
+    {
+         public static void Main(string[] args)
+        {
+            IServiceCollection serviceCollection = new ServiceCollection()
+              .AddSingleton<IFileReader, TextReader>()
+              .AddSingleton<System.Net.Http.HttpClient>()
+              .AddSingleton<IHttpClient, HttpClientHandler>()
+              .AddTransient<App>()
+              .AddOptions();
+
+            ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
+               serviceProvider.GetService<App>().Run();
+        }
+
+
+    }
+}
